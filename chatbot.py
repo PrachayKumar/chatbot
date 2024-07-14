@@ -15,8 +15,8 @@ class StreamHandler(BaseCallbackHandler):
 
 @st.cache_data()
 def create_chain(system_prompt):
-    api_token = "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"
-    repo_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    api_token = "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" #use your api token which is in write mode
+    repo_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"   #accept model agreement in huggingface
     llm = HuggingFaceHub(repo_id=repo_id, huggingfacehub_api_token=api_token)
     template = "{system_prompt} {question}"
     prompt = PromptTemplate(template=template, input_variables=["system_prompt", "question"])
@@ -44,13 +44,8 @@ for message in st.session_state.messages:
 user_prompt = st.text_input("Your message here", key="user_input")
 if user_prompt:
     st.session_state.messages.append({"role": "user", "content": user_prompt})
-    # try:
     formatted_prompt = {"system_prompt": system_prompt, "question": user_prompt}
     assistant_response = llm_chain.invoke(formatted_prompt)
-
-    # except Exception as e:
-    #     print(e)
-    #     assistant_response = "Sorry, I encountered an issue. Please try again later."
     st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     with st.chat_message("assistant"):
         st.markdown(assistant_response['text'])
